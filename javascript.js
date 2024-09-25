@@ -1,5 +1,14 @@
 let humanScore = 0;
 let computerScore = 0;
+let endGame = false;
+let rockBtn = document.querySelector('.rockBtn');
+let paperBtn = document.querySelector('.paperBtn');
+let scissorsBtn = document.querySelector('.scissorsBtn');
+let score = document.querySelector('#score');
+let scoreBoard = document.querySelector('#scoreBoard');
+let winner = document.createElement('span');
+let newLine = document.createElement('br');
+
 
 function getComputerChoice () {
     let randomNumber = Math.floor(Math.random() * 3) ;
@@ -19,53 +28,85 @@ function getHumanChoice () {
     return choice.toLowerCase();
 }
 
+function getWinner() {
+    if (humanScore === 5) {
+        winner.textContent = `You win the game! Score: ${humanScore} / ${computerScore}`;
+        scoreBoard.appendChild(winner);
+        scoreBoard.appendChild(newLine);
+        endGame = true;
+        humanScore = 0;
+        computerScore = 0;
+    }
+    else if (computerScore === 5) {
+        winner.textContent = `You lose the game! Score: ${computerScore} / ${humanScore}`;
+        scoreBoard.appendChild(winner);
+        scoreBoard.appendChild(newLine);
+        endGame = true;
+        computerScore = 0;
+        humanScore = 0;
+    }
+    else {
+        endGame = false;
+    }
+}
+
 
 function playRound(humanChoice, computerChoice) {
+    let roundScore = document.createElement('li');
+
+    if (endGame === true) {
+        score.textContent = '';
+        winner.textContent = '';
+        newLine.remove;
+    }
+
     if (humanChoice === 'rock' && computerChoice === 'paper') {
         computerScore++;
-        console.log(`You lose this round! ${computerChoice} beats ${humanChoice}`);
+        getWinner();
+        roundScore.textContent = `You lose this round! ${computerChoice} beats ${humanChoice}`;
     }
     else if (humanChoice === 'paper' && computerChoice === 'rock') {
         humanScore++;
-        console.log(`You won this round! ${humanChoice} beats ${computerChoice}`);
+        getWinner();
+        roundScore.textContent = `You won this round! ${humanChoice} beats ${computerChoice}`;
     }
     else if (humanChoice === 'scissors' && computerChoice === 'rock') {
         computerScore++;
-        console.log(`You lose this round! ${computerChoice} beats ${humanChoice}`);
+        getWinner();
+        roundScore.textContent = `You lose this round! ${computerChoice} beats ${humanChoice}`;
     }    
     else if (humanChoice === 'rock' && computerChoice === 'scissors') {
         humanScore++;
-        console.log(`You won this round! ${humanChoice} beats ${computerChoice}`);
+        getWinner();
+        roundScore.textContent = `You won this round! ${humanChoice} beats ${computerChoice}`;
     }
     else if (humanChoice === 'paper' && computerChoice === 'scissors') {
         computerScore++;
-        console.log(`You lose this round! ${computerChoice} beats ${humanChoice}`);
+        getWinner();
+        roundScore.textContent = `You lose this round! ${computerChoice} beats ${humanChoice}`;
     }    
     else if (humanChoice === 'scissors' && computerChoice === 'paper') {
         humanScore++;
-        console.log(`You won this round! ${humanChoice} beats ${computerChoice}`);
+        getWinner();
+        roundScore.textContent =`You won this round! ${humanChoice} beats ${computerChoice}`;
     }
     else {
-        console.log(`It's a tie!`)
-    }   
+        roundScore.textContent =`It's a tie!`;
+        getWinner();
+    }
+    score.appendChild(roundScore);   
   }
 
 
 
-function playGame() {
-    let i = 0;
-    while (i < 5) {
-        playRound(getHumanChoice(), getComputerChoice());
-        i++;
-    }
+rockBtn.addEventListener('click', () => {
+    playRound("rock",getComputerChoice());
+});
 
-    if (humanScore > computerScore) {
-        console.log(`You win the game! Score: ${humanScore} / ${computerScore}`);
-    }
-    else {
-        console.log(`You lose the game! Score: ${computerScore} / ${humanScore}`);
-    }
+paperBtn.addEventListener('click', () => {
+    playRound("paper",getComputerChoice());
+});
 
-}
-
-playGame();
+scissorsBtn.addEventListener('click', () => {
+    playRound("scissors",getComputerChoice());
+});
